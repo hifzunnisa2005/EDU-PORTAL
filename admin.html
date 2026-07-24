@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">EDUPORTAL</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link " href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link " href="courses.html">Courses</a></li>
+                    <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="admin.html">Admin</a></li>
+					<li class="nav-item"><a class="nav-link" href="logout.html">logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container py-5">
+        <div class="row mb-4">
+            <div class="col-md-4"><div class="card p-3 bg-primary text-white">Total Users: <h2 id="total">0</h2></div></div>
+        </div>
+        <input type="text" id="search" class="form-control mb-3" placeholder="Search by name...">
+        <table class="table bg-white">
+            <thead><tr><th>Name</th><th>ID</th><th>Action</th></tr></thead>
+            <tbody id="tbody"></tbody>
+        </table>
+    </div>
+    <script>
+        let history = JSON.parse(localStorage.getItem('regHistory')) || [];
+        function render(data) {
+            document.getElementById('tbody').innerHTML = "";
+            data.forEach((item, i) => {
+                document.getElementById('tbody').innerHTML += `<tr><td>${item.name}</td><td>${item.id}</td><td><button class='btn btn-danger btn-sm' onclick='del(${i})'>Delete</button></td></tr>`;
+            });
+            document.getElementById('total').innerText = data.length;
+        }
+        function del(i) { history.splice(i,1); localStorage.setItem('regHistory', JSON.stringify(history)); render(history); }
+        document.getElementById('search').oninput = (e) => {
+            const filtered = history.filter(h => h.name.toLowerCase().includes(e.target.value.toLowerCase()));
+            render(filtered);
+        };
+        render(history);
+    </script>
+</body>
+</html>
